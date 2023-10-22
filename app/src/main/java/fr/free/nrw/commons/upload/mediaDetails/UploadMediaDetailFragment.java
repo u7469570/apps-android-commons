@@ -131,6 +131,10 @@ public class UploadMediaDetailFragment extends UploadBaseFragment implements
      * editableUploadItem : Storing the upload item before going to update the coordinates
      */
     private UploadItem editableUploadItem;
+    /**
+     * overImageLimit: static flag to track whether the upload limit has been exceeded
+     */
+    private static boolean overImageLimit = false;
 
     private UploadMediaDetailFragmentCallback callback;
 
@@ -656,6 +660,14 @@ public class UploadMediaDetailFragment extends UploadBaseFragment implements
     public void onButtonCopyTitleDescToSubsequentMedia(){
         presenter.copyTitleAndDescriptionToSubsequentMedia(callback.getIndexInViewFlipper(this));
         Toast.makeText(getContext(), getResources().getString(R.string.copied_successfully), Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * Sets the global image upload limit flag
+     * @param overImageLimit set true if limit exceeded, false otherwise
+     */
+    public static void setOverImageLimit(boolean overImageLimit) {
+        UploadMediaDetailFragment.overImageLimit = overImageLimit;
     }
 
 }

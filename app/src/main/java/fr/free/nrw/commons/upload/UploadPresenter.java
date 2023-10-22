@@ -31,6 +31,9 @@ public class UploadPresenter implements UploadContract.UserActionListener {
     private final JsonKvStore defaultKvStore;
     private UploadContract.View view = DUMMY;
 
+    // SET TO 3 FOR TESTING PURPOSES
+    public final static int IMAGE_LIMIT = 3;
+
     private CompositeDisposable compositeDisposable;
     public static final String COUNTER_OF_CONSECUTIVE_UPLOADS_WITHOUT_COORDINATES
         = "number_of_consecutive_uploads_without_coordinates";

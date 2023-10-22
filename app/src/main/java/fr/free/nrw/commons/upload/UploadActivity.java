@@ -1,6 +1,7 @@
 package fr.free.nrw.commons.upload;
 
 import static fr.free.nrw.commons.contributions.ContributionController.ACTION_INTERNAL_UPLOADS;
+import static fr.free.nrw.commons.upload.UploadPresenter.IMAGE_LIMIT;
 import static fr.free.nrw.commons.utils.PermissionUtils.PERMISSIONS_STORAGE;
 import static fr.free.nrw.commons.wikidata.WikidataConstants.PLACE_OBJECT;
 import static fr.free.nrw.commons.wikidata.WikidataConstants.SELECTED_NEARBY_PLACE;
@@ -406,9 +407,18 @@ public class UploadActivity extends BaseActivity implements UploadContract.View,
             handleNullMedia();
         } else {
             //Show thumbnails
-            if (uploadableFiles.size()
+            int fileCount = uploadableFiles.size();
+            if (fileCount
                 > 1) {//If there is only file, no need to show the image thumbnails
                 thumbnailsAdapter.setUploadableFiles(uploadableFiles);
+                if (fileCount>IMAGE_LIMIT) {
+                    UploadMediaDetailFragment.setOverImageLimit(true);
+                    ViewUtil.showLongToast(this,
+                        getResources().getString(R.string.upload_image_limit_exceeded_message,
+                        IMAGE_LIMIT, fileCount-IMAGE_LIMIT));
+                } else {
+                    UploadMediaDetailFragment.setOverImageLimit(false);
+                }
             } else {
                 llContainerTopCard.setVisibility(View.GONE);
             }
