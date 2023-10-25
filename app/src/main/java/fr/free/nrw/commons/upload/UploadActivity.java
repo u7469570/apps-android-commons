@@ -745,4 +745,5 @@ public class UploadActivity extends BaseActivity implements UploadContract.View,
             this::finish
         );
     }
+
 }

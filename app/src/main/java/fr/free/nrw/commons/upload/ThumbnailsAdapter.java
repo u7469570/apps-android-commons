@@ -1,5 +1,7 @@
 package fr.free.nrw.commons.upload;
 
+import static fr.free.nrw.commons.upload.UploadPresenter.IMAGE_LIMIT;
+
 import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
@@ -8,6 +10,7 @@ import android.os.Build.VERSION_CODES;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
@@ -16,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 
+import fr.free.nrw.commons.utils.ViewUtil;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -65,7 +69,7 @@ class ThumbnailsAdapter extends RecyclerView.Adapter<ThumbnailsAdapter.ViewHolde
         return uploadableFiles.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         @BindView(R.id.rl_container)
         RelativeLayout rlContainer;
@@ -73,10 +77,13 @@ class ThumbnailsAdapter extends RecyclerView.Adapter<ThumbnailsAdapter.ViewHolde
         SimpleDraweeView background;
         @BindView(R.id.iv_error)
         ImageView ivError;
+        @BindView(R.id.ib_delete_image)
+        ImageButton ibDeleteImage;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            ibDeleteImage.setOnClickListener(this);
         }
 
         /**
@@ -106,6 +113,26 @@ class ThumbnailsAdapter extends RecyclerView.Adapter<ThumbnailsAdapter.ViewHolde
                 if (VERSION.SDK_INT >= VERSION_CODES.LOLLIPOP) {
                     rlContainer.setElevation(0);
                 }
+            }
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (v.getId() == R.id.ib_delete_image) {
+                removeImageAt(getAbsoluteAdapterPosition());
+            }
+        }
+
+        /**
+         * Removes an image from the adapter at the given position
+         * @param position Index to remove image from
+         */
+        private void removeImageAt(int position) {
+            if (uploadableFiles.size() > 1) {
+            notifyItemRemoved(position);
+            } else {
+                ViewUtil.showLongToast(context,
+                    context.getResources().getString(R.string.upload_delete_last_item_warning));
             }
         }
     }
